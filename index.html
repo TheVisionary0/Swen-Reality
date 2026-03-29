@@ -1,24 +1,86 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
   <title>Welcome</title>
+
+  <style>
+    body {
+      background-color: black;
+      color: white;
+      font-family: monospace;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+
+    img {
+      width: 250px;
+      margin-top: 60px;
+      filter: drop-shadow(0 0 15px red);
+    }
+
+    #box {
+      margin-top: 60px;
+    }
+
+    input {
+      padding: 15px;
+      font-size: 22px;
+      width: 300px;
+      border: none;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    button {
+      padding: 15px 25px;
+      font-size: 22px;
+      margin-top: 20px;
+      border: none;
+      border-radius: 8px;
+      background-color: red;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: darkred;
+    }
+
+    #hint {
+      margin-top: 25px;
+      color: gray;
+      font-size: 14px;
+    }
+  </style>
 </head>
-<body style="background:black; color:white; text-align:center; font-family:monospace;">
 
-<h1>Welcome.</h1>
+<body>
 
-<input type="password" id="pass" placeholder="Password">
-<button onclick="go()">Enter</button>
+  <!-- Eye Image -->
+  <img src="eye.png" alt="Eye">
 
-<script>
-function go() {
-  if (document.getElementById("pass").value === "test") {
-    window.location.href = "casefiles.html";
-  } else {
-    alert("Wrong password");
-  }
-}
-</script>
+  <!-- Password Box -->
+  <div id="box">
+    <input type="password" id="pass" placeholder="Enter password">
+    <br>
+    <button onclick="go()">Enter</button>
+  </div>
+
+  <div id="hint">The answer is closer than you think.</div>
+
+  <script>
+    function go() {
+      let input = document.getElementById("pass").value;
+
+      if (input === "Always watching") {
+        window.location.href = "casefiles.html";
+      } else {
+        alert("…no.");
+      }
+    }
+  </script>
 
 </body>
 </html>
