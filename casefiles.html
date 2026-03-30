@@ -135,3 +135,12 @@
 
 </body>
 </html>
+
+<script>
+  const urlParams = new URLSearchParams(window.location.search);
+  const code = urlParams.get('code');
+
+  if(code === '001011018') {
+    window.location.href = 'observation_logs.html';
+  }
+</script>
