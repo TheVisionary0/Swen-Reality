@@ -12,9 +12,8 @@
       text-align: center;
       margin: 0;
       padding: 40px;
-      background-image: url('eye.png'); /* optional background eyes image */
-      background-repeat: repeat;
-      background-size: 100px;
+      position: relative;
+      overflow: hidden;
     }
 
     h1 {
@@ -58,9 +57,37 @@
       background: rgba(0,0,0,0.1);
       pointer-events: none;
     }
+
+    /* Random background eyes */
+    body::before, body::after, div.eye1, div.eye2, div.eye3, div.eye4, div.eye5 {
+      content: "";
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      background-image: url('eye.png');
+      background-size: cover;
+      opacity: 0.2;
+      pointer-events: none;
+    }
+
+    /* Example positions for random eyes */
+    body::before { top: 10%; left: 5%; }
+    body::after { top: 50%; left: 80%; }
+    div.eye1 { top: 70%; left: 20%; }
+    div.eye2 { top: 30%; left: 60%; }
+    div.eye3 { top: 80%; left: 50%; }
+    div.eye4 { top: 15%; left: 75%; }
+    div.eye5 { top: 40%; left: 35%; }
   </style>
 </head>
 <body>
+
+  <!-- Random eye divs -->
+  <div class="eye1"></div>
+  <div class="eye2"></div>
+  <div class="eye3"></div>
+  <div class="eye4"></div>
+  <div class="eye5"></div>
 
   <h1>Case Files</h1>
 
@@ -69,11 +96,11 @@
   </div>
 
   <div class="casefile">
-    <img src="case001 (1).png" alt="Case 002">
+    <img src="case_002.png" alt="Case 002">
   </div>
 
   <div class="casefile">
-    <img src="case001 (2).png" alt="Case 003">
+    <img src="case_003.png" alt="Case 003">
   </div>
 
 </body>
