@@ -13,6 +13,7 @@
       overflow-x: hidden;
       color: white;
       text-align: center;
+      position: relative;
     }
 
     h1 {
@@ -26,24 +27,60 @@
       margin: 50px auto;
       width: 80%;
       max-width: 800px;
-      position: relative;
+      cursor: pointer;
       transition: transform 0.2s;
-    }
-
-    /* Slight glitch on hover */
-    .floorplan:hover {
-      transform: translate(2px, -2px);
-      filter: hue-rotate(10deg);
+      position: relative;
     }
 
     /* Background eyes */
     .bg-eye {
       position: absolute;
-      width: 50px;
-      opacity: 0.05;
+      width: 60px;
+      opacity: 0.2; /* make more visible */
       pointer-events: none;
       transition: all 0.3s;
     }
+
+    /* Popup for clicked floor plan */
+    #popup {
+      position: fixed;
+      top:50%;
+      left:50%;
+      transform: translate(-50%, -50%);
+      display: none;
+      background: rgba(0,0,0,0.95);
+      padding: 10px;
+      border: 2px solid red;
+      z-index: 10;
+    }
+
+    #popup img {
+      width: 90vw;
+      max-width: 900px;
+      animation: none;
+      cursor: pointer;
+    }
+
+    /* Glitch effect animation */
+    @keyframes glitch {
+      0% { transform: translate(0,0); }
+      20% { transform: translate(-2px,2px); }
+      40% { transform: translate(2px,-2px); }
+      60% { transform: translate(-1px,1px); }
+      80% { transform: translate(1px,-1px); }
+      100% { transform: translate(0,0); }
+    }
+
+    #closePopup {
+      position: absolute;
+      top:5px;
+      right:10px;
+      font-size: 18px;
+      color: red;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
   </style>
 </head>
 <body>
@@ -51,38 +88,49 @@
   <h1>Facility Floor Plans</h1>
 
   <!-- Floor plan images -->
-  <img src="floorplan1.png" class="floorplan" alt="Floor Plan 1">
-  <img src="floorplan2.png" class="floorplan" alt="Floor Plan 2">
-  <img src="floorplan3.png" class="floorplan" alt="Floor Plan 3">
+  <img src="floorplan1.png" class="floorplan" alt="Floor Plan 1" onclick="openPopup(this)">
+  <img src="floorplan2.png" class="floorplan" alt="Floor Plan 2" onclick="openPopup(this)">
+  <img src="floorplan3.png" class="floorplan" alt="Floor Plan 3" onclick="openPopup(this)">
 
-  <!-- Floating eyes -->
+  <!-- Background eyes -->
   <img src="eye.png" class="bg-eye" style="top:10%; left:5%;">
   <img src="eye.png" class="bg-eye" style="top:50%; left:70%;">
   <img src="eye.png" class="bg-eye" style="top:80%; left:30%;">
   <img src="eye.png" class="bg-eye" style="top:30%; left:50%;">
 
+  <!-- Popup for clicked floor plan -->
+  <div id="popup">
+    <div id="closePopup" onclick="closePopup()">X</div>
+    <img src="" id="popupImg">
+  </div>
+
   <script>
-    // Slight random movement for eyes
+    const popup = document.getElementById('popup');
+    const popupImg = document.getElementById('popupImg');
     const eyes = document.querySelectorAll('.bg-eye');
+
+    // Open floor plan popup
+    function openPopup(img) {
+      popupImg.src = img.src;
+      popup.style.display = 'block';
+      popupImg.style.animation = 'glitch 0.3s infinite';
+    }
+
+    function closePopup() {
+      popup.style.display = 'none';
+      popupImg.style.animation = 'none';
+    }
+
+    // Slight random movement for eyes
     setInterval(() => {
       eyes.forEach(eye => {
         const top = parseFloat(eye.style.top);
         const left = parseFloat(eye.style.left);
-        eye.style.top = `${top + (Math.random()*2-1)}%`;
-        eye.style.left = `${left + (Math.random()*2-1)}%`;
+        eye.style.top = `${Math.min(Math.max(top + (Math.random()*2-1),0),90)}%`;
+        eye.style.left = `${Math.min(Math.max(left + (Math.random()*2-1),0),90)}%`;
       });
     }, 300);
 
-    // Optional: slight random glitch for floor plans
-    const plans = document.querySelectorAll('.floorplan');
-    setInterval(() => {
-      plans.forEach(plan => {
-        const x = Math.random()*2-1;
-        const y = Math.random()*2-1;
-        plan.style.transform = `translate(${x}px, ${y}px)`;
-      });
-    }, 200);
   </script>
-
 </body>
 </html>
