@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <title>Observation Logs</title>
 
-  <!-- Font -->
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 
   <style>
@@ -30,7 +29,6 @@
       color: #aaa;
     }
 
-    /* Images (logs + newspapers) */
     .item {
       width: 250px;
       margin: 30px;
@@ -45,7 +43,6 @@
       transform: scale(1.05);
     }
 
-    /* Background eyes */
     .bg-eye {
       position: absolute;
       width: 60px;
@@ -82,13 +79,29 @@
       cursor: pointer;
     }
 
-    /* Glitch animation */
     @keyframes glitch {
       0% { transform: translate(0,0); }
       25% { transform: translate(-2px,2px); }
       50% { transform: translate(2px,-2px); }
       75% { transform: translate(-1px,1px); }
       100% { transform: translate(0,0); }
+    }
+
+    /* FINAL EYE */
+    #finalEye {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120px;
+      opacity: 0;
+      cursor: pointer;
+      transition: opacity 1s;
+    }
+
+    #finalEye.show {
+      opacity: 0.8;
+      animation: glitch 0.2s infinite;
     }
 
   </style>
@@ -98,15 +111,15 @@
   <h1>Observation Logs</h1>
 
   <!-- Logs -->
-  <img src="log1.png" class="item" onclick="openPopup(this)">
-  <img src="log2.png" class="item" onclick="openPopup(this)">
-  <img src="log3.png" class="item" onclick="openPopup(this)">
+  <img src="log1.png" class="item" onclick="openPopup(this, 1)">
+  <img src="log2.png" class="item" onclick="openPopup(this, 2)">
+  <img src="log3.png" class="item" onclick="openPopup(this, 3)">
 
   <h2>Recovered Articles</h2>
 
   <!-- Newspapers -->
-  <img src="newspaper_001.png" class="item" onclick="openPopup(this)">
-  <img src="newspaper_002.png" class="item" onclick="openPopup(this)">
+  <img src="newspaper_001.png" class="item" onclick="openPopup(this, 4)">
+  <img src="newspaper_002.png" class="item" onclick="openPopup(this, 5)">
 
   <!-- Background eyes -->
   <img src="eye.png" class="bg-eye" style="top:10%; left:5%;">
@@ -119,22 +132,38 @@
     <img id="popupImg">
   </div>
 
+  <!-- FINAL EYE -->
+  <img src="eye.png" id="finalEye" onclick="goNext()">
+
   <script>
     const popup = document.getElementById("popup");
     const popupImg = document.getElementById("popupImg");
+    const finalEye = document.getElementById("finalEye");
 
-    function openPopup(img){
+    let viewed = new Set();
+
+    function openPopup(img, id){
       popup.style.display = "flex";
       popupImg.src = img.src;
+      viewed.add(id);
     }
 
     function closePopup(event){
       if(event.target.id === "popup" || event.target.id === "closeBtn"){
         popup.style.display = "none";
+
+        // check if ALL viewed
+        if(viewed.size === 5){
+          finalEye.classList.add("show");
+        }
       }
     }
 
-    // slight eye movement
+    function goNext(){
+      window.location.href = "floorplan.html"; // next page
+    }
+
+    // eye movement
     const eyes = document.querySelectorAll('.bg-eye');
     setInterval(() => {
       eyes.forEach(eye => {
