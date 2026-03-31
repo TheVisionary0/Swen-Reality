@@ -28,20 +28,17 @@
       width: 80%;
       max-width: 800px;
       cursor: pointer;
-      transition: transform 0.2s;
       position: relative;
     }
 
-    /* Background eyes */
+    /* MANY BACKGROUND EYES */
     .bg-eye {
       position: absolute;
-      width: 60px;
-      opacity: 0.2; /* make more visible */
       pointer-events: none;
       transition: all 0.3s;
     }
 
-    /* Popup for clicked floor plan */
+    /* Popup */
     #popup {
       position: fixed;
       top:50%;
@@ -57,18 +54,7 @@
     #popup img {
       width: 90vw;
       max-width: 900px;
-      animation: none;
       cursor: pointer;
-    }
-
-    /* Glitch effect animation */
-    @keyframes glitch {
-      0% { transform: translate(0,0); }
-      20% { transform: translate(-2px,2px); }
-      40% { transform: translate(2px,-2px); }
-      60% { transform: translate(-1px,1px); }
-      80% { transform: translate(1px,-1px); }
-      100% { transform: translate(0,0); }
     }
 
     #closePopup {
@@ -81,56 +67,104 @@
       cursor: pointer;
     }
 
+    /* Glitch animation */
+    @keyframes glitch {
+      0% { transform: translate(0,0); }
+      25% { transform: translate(-3px,2px); }
+      50% { transform: translate(3px,-2px); }
+      75% { transform: translate(-2px,1px); }
+      100% { transform: translate(0,0); }
+    }
+
+    /* FINAL EYE (hidden at first) */
+    #finalEye {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120px;
+      opacity: 0;
+      cursor: pointer;
+      transition: opacity 1s;
+    }
+
+    #finalEye.show {
+      opacity: 0.8;
+      animation: glitch 0.2s infinite;
+    }
+
   </style>
 </head>
 <body>
 
   <h1>Facility Floor Plans</h1>
 
-  <!-- Floor plan images -->
-  <img src="floorplan1.png" class="floorplan" alt="Floor Plan 1" onclick="openPopup(this)">
-  <img src="floorplan2.png" class="floorplan" alt="Floor Plan 2" onclick="openPopup(this)">
-  <img src="floorplan3.png" class="floorplan" alt="Floor Plan 3" onclick="openPopup(this)">
+  <!-- Floor plans -->
+  <img src="floorplan1.png" class="floorplan" onclick="openPopup(this, 1)">
+  <img src="floorplan2.png" class="floorplan" onclick="openPopup(this, 2)">
+  <img src="floorplan3.png" class="floorplan" onclick="openPopup(this, 3)">
 
-  <!-- Background eyes -->
-  <img src="eye.png" class="bg-eye" style="top:10%; left:5%;">
-  <img src="eye.png" class="bg-eye" style="top:50%; left:70%;">
-  <img src="eye.png" class="bg-eye" style="top:80%; left:30%;">
-  <img src="eye.png" class="bg-eye" style="top:30%; left:50%;">
+  <!-- MANY EYES -->
+  <script>
+    const eyeCount = 25; // MORE EYES 🔥
+    for(let i = 0; i < eyeCount; i++){
+      const eye = document.createElement("img");
+      eye.src = "eye.png";
+      eye.className = "bg-eye";
+      eye.style.top = Math.random()*100 + "%";
+      eye.style.left = Math.random()*100 + "%";
+      eye.style.width = (30 + Math.random()*70) + "px";
+      eye.style.opacity = 0.05 + Math.random()*0.25;
+      document.body.appendChild(eye);
+    }
+  </script>
 
-  <!-- Popup for clicked floor plan -->
+  <!-- Popup -->
   <div id="popup">
     <div id="closePopup" onclick="closePopup()">X</div>
     <img src="" id="popupImg">
   </div>
 
+  <!-- FINAL CLICKABLE EYE -->
+  <img src="eye.png" id="finalEye" onclick="goToVisionary()">
+
   <script>
     const popup = document.getElementById('popup');
     const popupImg = document.getElementById('popupImg');
-    const eyes = document.querySelectorAll('.bg-eye');
+    const finalEye = document.getElementById('finalEye');
 
-    // Open floor plan popup
-    function openPopup(img) {
+    let viewed = new Set();
+
+    function openPopup(img, id) {
       popupImg.src = img.src;
       popup.style.display = 'block';
-      popupImg.style.animation = 'glitch 0.3s infinite';
+      popupImg.style.animation = 'glitch 0.2s infinite';
+      viewed.add(id);
     }
 
     function closePopup() {
       popup.style.display = 'none';
       popupImg.style.animation = 'none';
+
+      // If all 3 viewed → reveal final eye
+      if(viewed.size === 3){
+        finalEye.classList.add("show");
+      }
     }
 
-    // Slight random movement for eyes
+    function goToVisionary(){
+      window.location.href = "visionary.html";
+    }
+
+    // Subtle eye movement
     setInterval(() => {
-      eyes.forEach(eye => {
-        const top = parseFloat(eye.style.top);
-        const left = parseFloat(eye.style.left);
-        eye.style.top = `${Math.min(Math.max(top + (Math.random()*2-1),0),90)}%`;
-        eye.style.left = `${Math.min(Math.max(left + (Math.random()*2-1),0),90)}%`;
+      document.querySelectorAll('.bg-eye').forEach(eye => {
+        eye.style.top = (parseFloat(eye.style.top) + (Math.random()*2-1)) + "%";
+        eye.style.left = (parseFloat(eye.style.left) + (Math.random()*2-1)) + "%";
       });
     }, 300);
 
   </script>
+
 </body>
 </html>
